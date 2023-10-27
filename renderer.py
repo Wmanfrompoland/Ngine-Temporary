@@ -3,12 +3,13 @@ import numpy  as np
 from math import cos,sin
 
 class Renderer:
-    def __init__(self,screen,points3D,scale, center):
+    def __init__(self,screen,points3D,scale, center, pointsToConnect):
         self.screen = screen
         self.points3D = points3D
         self.center = center
         self.scale = scale
-        self.projectedPoints = []
+        self.pointsToConnect = pointsToConnect
+        self.projectedPoints = [(i,i) for i in range(len(self.points3D))]
         self.angles = [0,0,0] # xyz
 
         self.projection_matrix = np.matrix([
@@ -36,6 +37,12 @@ class Renderer:
             [0, sin(self.angles[0]), cos(self.angles[0])],
             ])
     
+    def connectLines(self):
+        for pair in self.pointsToConnect:
+            start = (pair[0])-1
+            end = (pair[1])-1
+            #print(self.projectedPoints[end])
+            pygame.draw.line(self.screen,(0,0,0),self.projectedPoints[start],self.projectedPoints[end],5)
 
 
     def render(self):
@@ -49,9 +56,9 @@ class Renderer:
 
             x = int(projected2d[0][0] * self.scale) + self.center[0]
             y = int(projected2d[1][0] * self.scale) + self.center[1]
-            self.projectedPoints.append([])
-            self.projectedPoints[i] = [x,y]
+            self.projectedPoints[i] = (x,y)
             pygame.draw.circle(self.screen, (255,0,0), (x,y), 5)
+            self.connectLines()
             i += 1
     def changeAngles(self, x,y,z):
         self.angles = [x,y,z]
