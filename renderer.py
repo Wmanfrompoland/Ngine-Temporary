@@ -1,13 +1,15 @@
+
 import pygame 
 import numpy  as np
 from math import cos,sin
 
 class Renderer:
-    def __init__(self,screen,points3D,scale, center, pointsToConnect):
+    def __init__(self,screen,points3D,scale, center, pointsToConnect, pointsToFill):
         self.screen = screen
         self.points3D = points3D
         self.center = center
         self.scale = scale
+        self.pointsToFill = pointsToFill
         self.pointsToConnect = pointsToConnect
         self.projectedPoints = [(i,i) for i in range(len(self.points3D))]
         self.angles = [0,0,0] # xyz
@@ -43,6 +45,18 @@ class Renderer:
             end = (pair[1])-1
             #print(self.projectedPoints[end])
             pygame.draw.line(self.screen,(0,0,0),self.projectedPoints[start],self.projectedPoints[end],5)
+    
+    def fill(self):
+        polygon = []
+        polygon3D = []
+        distance = 0
+        for face in self.pointsToFill:
+                for i in face:
+                    polygon.append(self.projectedPoints[i-1])
+                    polygon3D.append(self.points3D[i-1].tolist())
+                distance = ((polygon3D[0][0][2]+polygon3D[1][0][2]+polygon3D[2][0][2])/3)*100
+                print(distance)
+                pygame.draw.polygon(self.screen, (distance,distance,distance), polygon)
 
 
     def render(self):

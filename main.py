@@ -8,8 +8,8 @@ screen = pygame.display.set_mode((800,600))
 scale = 100
 center = (400,300)
 angle = 0
-points,lines = cube.model()
-""""
+#points,lines,fill = cube.model()
+
 lines =[[1,2],[2,3],[3,4],[4,1],
         [5,6],[6,7],[7,8],[8,5], 
         [1,5],[2,6],[3,7],[4,8]]
@@ -22,8 +22,8 @@ points.append(np.matrix([-1, -1, -1]))
 points.append(np.matrix([1, -1, -1]))
 points.append(np.matrix([1, 1, -1]))
 points.append(np.matrix([-1, 1, -1]))
-"""
-rendererObj = renderer.Renderer(screen,points,scale,center,lines)
+fill = []
+rendererObj = renderer.Renderer(screen,points,scale,center,lines,fill)
 
 clock = pygame.time.Clock()
 while True:
@@ -35,7 +35,7 @@ while True:
             exit()
 
     screen.fill((255,255,255))
-    rendererObj.changeAngles(angle,angle,0)
+    rendererObj.changeAngles(angle,angle,angle)
     rendererObj.render()
     pygame.display.update()
 
